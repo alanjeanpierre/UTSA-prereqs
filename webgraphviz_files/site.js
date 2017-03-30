@@ -43,8 +43,10 @@ jQuery(document).ready(function () {
 		  
 		transcript.innerHTML = this.result;
 		var coursePattern = /\d\d\d\d/i;
-		
 		var courses = transcript.querySelectorAll(".dddefault");
+		
+		g.marked = [];
+		
 		for (var i = 0; i < courses.length; i++) {
 			var disc = courses[i].innerHTML;
 			if (courses[i+1] != null && coursePattern.test(courses[i+1].innerHTML)) {
