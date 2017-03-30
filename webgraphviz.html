@@ -1,0 +1,52 @@
+
+<!-- saved from url=(0027)http://www.webgraphviz.com/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>IEEE Course Prerequisite Checker</title>
+  </head>
+<body>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-96226324-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<style>
+  button { margin:4px; cursor:pointer; font-size: 70%; font-family; arial,sans-serif; margin-right: 5px }
+</style>
+
+<h2>WebGraphviz is <a href="http://www.graphviz.org/">Graphviz</a> in the Browser</h2>
+Enter the course you want to lookup in the box and click Generate Graph!
+
+
+<p style="font-size:75%">
+Disclaimer: This is not a substitute for one's advisor. </br>
+Always double-check with your degree-plan and advisor before registering for any courses.</br>
+(Your Graphviz data is private and never harvested)</p>
+
+<br>
+<p><input id = "course" type="text" value="EE 4813"> (Course)</p>
+<p>
+
+<button id="generate_btn" style="font-size: 120%">Generate Graph!</button>
+
+<p> Please send any feedback to: <a href="mailto:a.jeanpierre.825@gmail.com?subject=Prereqs" target="_top">Alan Jeanpierre</a></p>
+
+</p><div id="graphviz_svg_div">
+  <!-- Target for dynamic svg generation -->
+</div>
+<p> 
+
+
+<!-- Defer loading of javascript by placing these tags at the tail end of the document -->
+<script language="javascript" type="text/javascript" src="./webgraphviz_files/jquery.min.js"> </script>
+<script language="javascript" type="text/javascript" src="./webgraphviz_files/viz.js"></script>
+<script language="javascript" type="text/javascript" src="./webgraphviz_files/site.js"> </script>
+<script language="javascript" type="text/javascript" src="./graphlib.js"></script>
+</body></html>
