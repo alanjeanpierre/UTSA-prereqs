@@ -33,6 +33,33 @@ jQuery(document).ready(function () {
 
   var g = buildGraph();
 
+  document.getElementById('dw').onchange = function(){
+
+	  var file = this.files[0];
+	  var transcript = document.createElement('html');
+
+	  var reader = new FileReader();
+	  reader.onload = function(progressEvent){
+		  
+		transcript.innerHTML = this.result;
+		var coursePattern = /\d\d\d\d/i;
+		
+		var courses = transcript.querySelectorAll(".dddefault");
+		for (var i = 0; i < courses.length; i++) {
+			var disc = courses[i].innerHTML;
+			if (courses[i+1] != null && coursePattern.test(courses[i+1].innerHTML)) {
+				var num = courses[i+1].innerHTML;
+				var c = disc + " " + num;
+				var node = g.getNode(c);
+				if (node) {
+					console.log(node.name);
+					g.marked.push(node.name);
+				}
+			}
+		}
+	  };
+	  reader.readAsText(file);
+  };
 
 
 

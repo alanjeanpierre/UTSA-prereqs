@@ -3,11 +3,13 @@
 function Graph(){
 	this.isWeighted=false;
 	this.nodes=[]
+	this.marked = [];
 	this.addNode=addNode;
 	this.removeNode=removeNode;
 	this.nodeExist=nodeExist;
 	this.getAllNodes=getAllNodes;
 	this.getNode=getNode;
+	
 	
 	function addNode(Name, Title, Desc){
 		temp=new Node(Name, Title, Desc);
@@ -121,15 +123,21 @@ function bfs(graph, course){
 	allNodes=graph.getAllNodes();
 	marked={};
 	
+	for (var i = 0; i < graph.marked.length; i++) {
+		marked[graph.marked[i]] = true;
+	}
+	console.log(marked);
+	
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
+		//if (marked[v.name]) continue;
 		marked[v.name]=true;
 		//ans.push(v.toString());
 		adjList=v.adjList;
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
-			console.log(v.printEdge(u, v.weight[i]));
+			//console.log(v.printEdge(u, v.weight[i]));
 			ans2 += v.printEdge(u);
 			if(marked[u.name]!=true){
 				traversedNodes.push(u);
