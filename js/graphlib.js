@@ -126,7 +126,9 @@ function bfs(graph, course){
 	for (var i = 0; i < graph.marked.length; i++) {
 		marked[graph.marked[i]] = true;
 	}
-	console.log(marked);
+	
+	if (document.getElementById("flip").checked) 
+		ans2 += "rankdir=BT\n";
 	
 	
 	while(traversedNodes.length!=0){
