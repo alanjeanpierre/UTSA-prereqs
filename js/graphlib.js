@@ -162,12 +162,19 @@ function bfs(graph, course){
 		ans2 += "rankdir=BT;\n";
 	
 	
+	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
 		//if (marked[v.name]) continue;
 		marked[v.name]=true;
 		//ans.push(v.toString());
 		adjList=v.adjList;
+		
+		
+		if (adjList == 0) {
+			ans2 += v.printNode() + "\n";
+		}
+		
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
 			//console.log(v.printEdge(u, v.weight[i]));
@@ -204,6 +211,10 @@ function dfs(graph){
 		marked[v.name]=true;
 		adjList=v.adjList;
 		//console.log(v);
+		
+		if (adjList == 0) {
+			ans += v.printNode() + "\n";
+		}
 		
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
