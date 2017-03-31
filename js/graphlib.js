@@ -78,6 +78,8 @@ function Node(Name, Title, Desc){
 	this.compare=compare;
 	this.toString=toString;
 	this.printEdge=printEdge;
+	this.printNode=printNode;
+	
 	function addEdge(neighbour,weight){
 		this.adjList.push(neighbour);
 		this.weight.push(weight);	
@@ -92,8 +94,12 @@ function Node(Name, Title, Desc){
 	function toString() {
 		return this.name + " " + this.title;
 	}
+	function printNode() {
+		return "\"" + this.name + "\\n" + this.title + "\"";
+	}
 	function printEdge(node2, weight) {
 		var options = "[dir=back ";
+		//console.log(weight);
 		switch(weight) {
 			case 0:
 				options += " style=dashed color=red]";
@@ -113,7 +119,7 @@ function Node(Name, Title, Desc){
 			default: 
 				options += "]";
 		}
-		return "\"" + this.name + "\\n" + this.title + "\" -> \"" + node2.name + "\\n" + node2.title + "\" " + options + "\n"; 
+		return this.printNode() + " -> " + node2.printNode() + options + "\n"; 
 	}
 }
 function bfs(graph, course){
@@ -140,7 +146,7 @@ function bfs(graph, course){
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
 			//console.log(v.printEdge(u, v.weight[i]));
-			ans2 += v.printEdge(u);
+			ans2 += v.printEdge(u, v.weight[i]);
 			if(marked[u.name]!=true){
 				traversedNodes.push(u);
 				marked[u.name]=true;
@@ -149,7 +155,10 @@ function bfs(graph, course){
 		}			
 	}
 	
+	
+	
 	ans2 += "}";
+	//console.log(ans2);
 	return ans2;
 }
 
