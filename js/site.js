@@ -75,7 +75,14 @@ jQuery(document).ready(function () {
 		svg_div.html("Unkown Course");
 	}
 	else {
-		var data = bfs(g, node);
+		var data;
+		if(!document.getElementById("showall").checked) {
+			data = bfs(g, node); 
+		}
+		else {
+			data = dfs(g);
+		}
+		console.log(data);
 		// Generate the Visualization of the Graph into "svg".
 		var svg = Viz(data, "svg");
 		svg_div.html("<hr>"+svg);

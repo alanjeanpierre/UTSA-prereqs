@@ -51,7 +51,7 @@ function Graph(){
 	}
 
 	function getAllNodes(){
-		return this.nodes;
+		return this.nodes.slice();
 	}
 	
 	function getBFSTravaersal(){
@@ -78,6 +78,7 @@ function Node(Name, Title, Desc){
 	this.compare=compare;
 	this.toString=toString;
 	this.printEdge=printEdge;
+	this.printEdgeShort=printEdgeShort;
 	this.printNode=printNode;
 	
 	function addEdge(neighbour,weight){
@@ -98,7 +99,7 @@ function Node(Name, Title, Desc){
 		return "\"" + this.name + "\\n" + this.title + "\"";
 	}
 	function printEdge(node2, weight) {
-		var options = "[dir=back ";
+		var options = " [dir=back ";
 		//console.log(weight);
 		switch(weight) {
 			case 0:
@@ -119,7 +120,30 @@ function Node(Name, Title, Desc){
 			default: 
 				options += "]";
 		}
-		return this.printNode() + " -> " + node2.printNode() + options + "\n"; 
+		return this.printNode() + " -> " + node2.printNode() + options + ";\n"; 
+	}
+	function printEdgeShort(node2, weight) {
+		var options = " [dir=back ";
+		switch(weight) {
+			case 0:
+				options += " style=dashed color=red]";
+				break;
+			case 1:
+				options += " color=red]";
+				break;
+			case 2:
+				options += " color=blue]";
+				break;
+			case 3:
+				options += " color=green]";
+				break;
+			case 4:
+				options += " style=dashed color=green]";
+				break;
+			default: 
+				options += "]";
+		}
+		return "\"" + this.name + "\" -> \"" + node2.name + "\"" + options + ";\n";
 	}
 }
 function bfs(graph, course){
@@ -128,13 +152,14 @@ function bfs(graph, course){
 	traversedNodes.push(course);
 	allNodes=graph.getAllNodes();
 	marked={};
-	
-	for (var i = 0; i < graph.marked.length; i++) {
-		marked[graph.marked[i]] = true;
+	if (!document.getElementById("notrans").checked) {
+		for (var i = 0; i < graph.marked.length; i++) {
+			marked[graph.marked[i]] = true;
+		}
 	}
 	
 	if (document.getElementById("flip").checked) 
-		ans2 += "rankdir=BT\n";
+		ans2 += "rankdir=BT;\n";
 	
 	
 	while(traversedNodes.length!=0){
@@ -164,25 +189,32 @@ function bfs(graph, course){
 
 
 function dfs(graph){
-	ans=[];
-	traversedNodes=[];
-	traversedNodes.push(graph.nodes[0]);
+	ans="digraph G {\n";
+	traversedNodes=graph.getAllNodes();
+	//traversedNodes.push(graph.nodes[0]);
 	allNodes=graph.getAllNodes();
 	marked={};
+	
+	ans += "rankdir=LR;\n";
+	
+	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.pop();
+		if (marked[v.name] == true) continue;
 		marked[v.name]=true;
 		adjList=v.adjList;
-		console.log(v);
-		ans.push(v);
+		//console.log(v);
+		
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
+			ans += v.printEdgeShort(u, v.weight[i]);
 			if(marked[u.name]!=true){
 				traversedNodes.push(u);
 				marked[u.name]=true;
 			}
 		}			
 	}
+	ans+= "}";
 	return ans;
 }
 
