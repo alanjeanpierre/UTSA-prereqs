@@ -53,8 +53,8 @@ jQuery(document).ready(function () {
 				var num = courses[i+1].innerHTML;
 				var c = disc + " " + num;
 				var node = g.getNode(c);
-				if (node) {
-					console.log(node.name);
+				if (node && courses[i+4] != null && courses[i+4].innerHTML != "F" && courses[i+4].innerHTML[0] != "D") {
+					//console.log(node.name);
 					g.marked.push(node.name);
 				}
 			}
