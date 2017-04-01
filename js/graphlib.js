@@ -213,7 +213,7 @@ function dfs(graph){
 		//console.log(v);
 		
 		if (adjList == 0) {
-			ans += v.printNode() + "\n";
+			ans += "\"" + v.name + "\"\n";
 		}
 		
 		for (var i=0;i<adjList.length;i++){
