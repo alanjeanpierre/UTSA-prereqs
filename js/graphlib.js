@@ -204,6 +204,7 @@ function bfs(graph, course){
 			rankMap[longest[c]] += "\"" + c + "\"; ";
 		}
 		
+		for (var rank in rankMap) {
 			rankList += "{rank = same; " + rankMap[rank] + "};\n";
 		}
 	}
