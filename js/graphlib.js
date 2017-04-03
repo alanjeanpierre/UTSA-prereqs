@@ -81,7 +81,6 @@ function Node(Name, Title, Desc){
 	this.printEdgeShort=printEdgeShort;
 	this.printNode=printNode;
 	this.printWeight=printWeight;
-	this.fixTitle=fixTitle;
 
 	function addEdge(neighbour,weight){
 		this.adjList.push(neighbour);
@@ -94,22 +93,10 @@ function Node(Name, Title, Desc){
 	function compare(node2){
 		return this.weight-node2.weight;
 	}
-	function fixTitle(title) {
-		var l = title.length;
-		if (l > 25) {
-			var index = title.lastIndexOf(" ");
-			var index = title.slice(0,index).lastIndexOf(" ");
-			var first = title.slice(0, index);
-			var last = title.slice(index);
-			title = first + "\\n" + last;
-		}
-		return title;
-	}
 	function toString() {
 		return this.name + " " + this.title;
 	}
 	function printNode() {
-		this.title = fixTitle(this.title);
 		return "\"" + this.name + "\\n" + this.title + "\"";
 	}
 	function printWeight(weight) {
@@ -151,11 +138,19 @@ function bfs(graph, course){
 	declarations = "digraph G {\n";
 	nodeList = "";
 	edgeList = "";
+	rankList = "";
 	traversedNodes=[];
+	ranks = [];
+	rankMap = {};
 	traversedNodes.push(course);
-	allNodes=graph.getAllNodes();
+	ranks.push(0);
+	dijks = [];
+	//allNodes=graph.getAllNodes();
 	marked={};
-	if (!document.getElementById("notrans").checked) {
+	if (document.getElementById("notrans").checked) {
+	}
+	else {
+		
 		for (var i = 0; i < graph.marked.length; i++) {
 			marked[graph.marked[i]] = true;
 		}
@@ -172,33 +167,47 @@ function bfs(graph, course){
 	declarations += "splines=curved;\n";
 	declarations += "splines=true;\n";
 	declarations += "nodesep=0.1;\n";
-	declarations += "node [fontsize=9 width=2 fixedsize=true];\n";
+	declarations += "node [fontsize=9 width=3 fixedsize=true];\n";
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
+		dijks.push(v);
+		var r = ranks.shift();
 		//if (marked[v.name]) continue;
 		marked[v.name]=true;
-		//ans.push(v.toString());
-		adjList=v.adjList;
+		adjList=v.adjList.slice();
 		
-		
+		//declaring and labeling all nodes
 		nodeList += "\"" + v.name + "\"" + " [label=" + v.printNode() + "];\n";
 		
 		for (var i=0;i<adjList.length;i++){
-			u=adjList[i];
-			//console.log(v.printEdge(u, v.weight[i]));
-			edgeList += v.printEdgeShort(u, v.weight[i]);
-			if(marked[u.name]!=true){
-				traversedNodes.push(u);
-				marked[u.name]=true;
-
+			bu=adjList[i];
+			edgeList += v.printEdgeShort(bu, v.weight[i]);
+			if(marked[bu.name]!=true){
+				traversedNodes.push(bu);
+				marked[bu.name]=true;
+			}
+			else{
+				// catches unlabled and untraversed nodes from transcripts
+				if (!(new RegExp(bu.name)).test(nodeList)) {
+					nodeList += "\"" + bu.name + "\"" + " [label=" + bu.printNode() + "];\n";
+				}
 			}
 		}			
 	}
 	
-	
-	
-	return declarations + nodeList + edgeList + "}";
+	// gets longest path to a course for the rank tier
+	if (document.getElementById("tier").checked) {
+		var longest = dijkstra(graph, course, dijks);
+		for (var c in longest) {
+			if (!rankMap[longest[c]]) rankMap[longest[c]] = "";
+			rankMap[longest[c]] += "\"" + c + "\"; ";
+		}
+		
+			rankList += "{rank = same; " + rankMap[rank] + "};\n";
+		}
+	}
+	return declarations + nodeList + rankList  + edgeList + "}";
 }
 
 
@@ -209,13 +218,11 @@ function dfs(graph){
 	edgeList = "";
 	traversedNodes=graph.getAllNodes();
 	allNodes=graph.getAllNodes();
-	//marked={};
 	
 	declarations += "dirType=back;\n";
 	
 	declarations += "dpi=50;\n";
 	declarations += "edge [penwidth=.3 arrowsize=.8];\n";
-	//declarations += "graph [truecolor bgcolor=\"#ff00005f\"];\n";
 	declarations += "node [shape=ellipse filled=true fillcolor=white];\n";
 	declarations += "splines=curved;\n";
 	declarations += "ranksep=4;\n";
@@ -225,21 +232,13 @@ function dfs(graph){
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.pop();
-		//if (marked[v.name] == true) continue;
-		//marked[v.name]=true;
 		adjList=v.adjList;
-		//console.log(v);
-		
-		
 		for (var i=0;i<adjList.length;i++){
-			
 			nodeList += "\"" + v.name + "\";\n";
 			u=adjList[i];
 			edgeList += v.printEdgeShort(u, v.weight[i]);
-
 		}			
 	}
-	
 	
 	return declarations + nodeList + edgeList + "}";
 }
@@ -367,29 +366,33 @@ function MinPQNodes(content,priority){
 }
 
 
-function dijkstra(graph,source,destination){
+function dijkstra(graph,source, givenNodes){
 
 	this.previousNode=[];
-	this.distance=new Array();				
+	this.distance={};				
 	this.distance[source.name]=0;
 	this.pq=new MinPQ();
-	var nodes=graph.getAllNodes();
+	var nodes=givenNodes;
 	length=nodes.length;
 	for(var i=0;i<length;i++){
 		if(nodes[i]!=source){
-			this.distance[nodes[i].name]=Number.POSITIVE_INFINITY;
+			this.distance[nodes[i].name]=Number.NEGATIVE_INFINITY;
 		}
         this.pq.push(nodes[i],this.distance[nodes[i].name]);
 	}
 	
 	while(this.pq.size()!=0){
 		u=this.pq.pop();
-		adjList=u.adjList;
-		for (var i = 0; i < adjList.length; i++) {
-			v=adjList[i];
-			if(this.distance[u.name]!=Number.POSITIVE_INFINITY){
-				alt=this.distance[u.name]+u.weight[i];
-				if(alt<this.distance[v.name]){
+		badjList=u.adjList.slice();
+		for (var i = 0; i < badjList.length; i++) {
+			v=badjList[i];
+			if(this.distance[u.name]!=Number.NEGATIVE_INFINITY){
+				var weight = 1;
+				if ( u.weight[i] > 2) {
+					weight = 0;
+				}
+				alt=this.distance[u.name]+weight;
+				if(alt>this.distance[v.name] && v.adjList.indexOf(u) < 0){
 					this.distance[v.name]=alt;
 					this.previousNode[v.name]=u.name;
                     this.pq.remove(v);
@@ -398,10 +401,7 @@ function dijkstra(graph,source,destination){
 			}
 		}
 	}
-	if(typeof destination==='undefined'){
-
-	}else 
-	return this.distance[destination.name];
+	return this.distance;
 }
 
 function bellman_ford(graph,source,destination){
