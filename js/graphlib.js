@@ -214,16 +214,18 @@ function dfs(graph){
 	declarations += "dirType=back;\n";
 	
 	declarations += "dpi=50;\n";
-	
-	declarations += "node [shape=\"plaintext\"];\n";
+	declarations += "edge [penwidth=.3 arrowsize=.8];\n";
+	//declarations += "graph [truecolor bgcolor=\"#ff00005f\"];\n";
+	declarations += "node [shape=ellipse filled=true fillcolor=white];\n";
 	declarations += "splines=curved;\n";
-	declarations += "ranksep=2;\n";
-	declarations += "overlap=compress;\n";
+	declarations += "ranksep=4;\n";
+	declarations += "overlap=false;\n";
+	declarations += "outputorder=nodefirst;\n";
 	
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.pop();
-		if (marked[v.name] == true) continue;
+		//if (marked[v.name] == true) continue;
 		marked[v.name]=true;
 		adjList=v.adjList;
 		//console.log(v);
