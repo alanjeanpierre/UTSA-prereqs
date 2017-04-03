@@ -80,8 +80,9 @@ function Node(Name, Title, Desc){
 	this.printEdge=printEdge;
 	this.printEdgeShort=printEdgeShort;
 	this.printNode=printNode;
-	this.printWeight=printWeight();
-	
+	this.printWeight=printWeight;
+	this.fixTitle=fixTitle;
+
 	function addEdge(neighbour,weight){
 		this.adjList.push(neighbour);
 		this.weight.push(weight);	
@@ -93,10 +94,22 @@ function Node(Name, Title, Desc){
 	function compare(node2){
 		return this.weight-node2.weight;
 	}
+	function fixTitle(title) {
+		var l = title.length;
+		if (l > 25) {
+			var index = title.lastIndexOf(" ");
+			var index = title.slice(0,index).lastIndexOf(" ");
+			var first = title.slice(0, index);
+			var last = title.slice(index);
+			title = first + "\\n" + last;
+		}
+		return title;
+	}
 	function toString() {
 		return this.name + " " + this.title;
 	}
 	function printNode() {
+		this.title = fixTitle(this.title);
 		return "\"" + this.name + "\\n" + this.title + "\"";
 	}
 	function printWeight(weight) {
@@ -154,11 +167,12 @@ function bfs(graph, course){
 	
 	declarations += "dirType=back;\n";
 	
-	declarations += "dpi=50;\n";
+	declarations += "dpi=70;\n";
 	
 	declarations += "splines=curved;\n";
 	declarations += "splines=true;\n";
 	declarations += "nodesep=0.1;\n";
+	declarations += "node [fontsize=9 width=2 fixedsize=true];\n";
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
