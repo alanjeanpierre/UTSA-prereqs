@@ -71,6 +71,7 @@ jQuery(document).ready(function () {
 	var name = document.getElementById("course").value;
 	name = name.toUpperCase();
 	var node = g.getNode(name);
+	var renderer;
 	if (node == null) {
 		svg_div.html("Unkown Course");
 	}
@@ -78,13 +79,15 @@ jQuery(document).ready(function () {
 		var data;
 		if(!document.getElementById("showall").checked) {
 			data = bfs(g, node); 
+			renderer = "dot";
 		}
 		else {
 			data = dfs(g);
+			renderer = "twopi";
 		}
 		console.log(data);
 		// Generate the Visualization of the Graph into "svg".
-		var svg = Viz(data, "svg");
+		var svg = Viz(data, {format:"svg", engine:renderer});
 		svg_div.html("<hr>"+svg);
 	}
     

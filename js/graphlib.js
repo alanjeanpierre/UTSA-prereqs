@@ -80,6 +80,7 @@ function Node(Name, Title, Desc){
 	this.printEdge=printEdge;
 	this.printEdgeShort=printEdgeShort;
 	this.printNode=printNode;
+	this.printWeight=printWeight();
 	
 	function addEdge(neighbour,weight){
 		this.adjList.push(neighbour);
@@ -98,8 +99,8 @@ function Node(Name, Title, Desc){
 	function printNode() {
 		return "\"" + this.name + "\\n" + this.title + "\"";
 	}
-	function printEdge(node2, weight) {
-		var options = " [dir=back ";
+	function printWeight(weight) {
+		var options = " [";
 		//console.log(weight);
 		switch(weight) {
 			case 0:
@@ -120,34 +121,23 @@ function Node(Name, Title, Desc){
 			default: 
 				options += "]";
 		}
+		
+		return options;
+	}
+	function printEdge(node2, weight) {
+		var options = printWeight(weight);
 		return this.printNode() + " -> " + node2.printNode() + options + ";\n"; 
 	}
 	function printEdgeShort(node2, weight) {
-		var options = " [dir=back ";
-		switch(weight) {
-			case 0:
-				options += " style=dashed color=red]";
-				break;
-			case 1:
-				options += " color=red]";
-				break;
-			case 2:
-				options += " color=blue]";
-				break;
-			case 3:
-				options += " color=green]";
-				break;
-			case 4:
-				options += " style=dashed color=green]";
-				break;
-			default: 
-				options += "]";
-		}
+		var options = printWeight(weight);
 		return "\"" + this.name + "\" -> \"" + node2.name + "\"" + options + ";\n";
 	}
 }
 function bfs(graph, course){
-	ans2 = "digraph G {\n";
+	//ans2 = "digraph G {\n";
+	declarations = "digraph G {\n";
+	nodeList = "";
+	edgeList = "";
 	traversedNodes=[];
 	traversedNodes.push(course);
 	allNodes=graph.getAllNodes();
@@ -159,9 +149,16 @@ function bfs(graph, course){
 	}
 	
 	if (document.getElementById("flip").checked) 
-		ans2 += "rankdir=BT;\n";
+		declarations += "rankdir=BT;\n";
+
 	
+	declarations += "dirType=back;\n";
 	
+	declarations += "dpi=50;\n";
+	
+	declarations += "splines=curved;\n";
+	declarations += "splines=true;\n";
+	declarations += "nodesep=0.1;\n";
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
@@ -171,14 +168,12 @@ function bfs(graph, course){
 		adjList=v.adjList;
 		
 		
-		if (adjList == 0) {
-			ans2 += v.printNode() + "\n";
-		}
+		nodeList += "\"" + v.name + "\"" + " [label=" + v.printNode() + "];\n";
 		
 		for (var i=0;i<adjList.length;i++){
 			u=adjList[i];
 			//console.log(v.printEdge(u, v.weight[i]));
-			ans2 += v.printEdge(u, v.weight[i]);
+			edgeList += v.printEdgeShort(u, v.weight[i]);
 			if(marked[u.name]!=true){
 				traversedNodes.push(u);
 				marked[u.name]=true;
@@ -189,20 +184,27 @@ function bfs(graph, course){
 	
 	
 	
-	ans2 += "}";
-	//console.log(ans2);
-	return ans2;
+	return declarations + nodeList + edgeList + "}";
 }
 
 
 function dfs(graph){
 	ans="digraph G {\n";
+	declarations = "digraph G {\n";
+	nodeList = "";
+	edgeList = "";
 	traversedNodes=graph.getAllNodes();
-	//traversedNodes.push(graph.nodes[0]);
 	allNodes=graph.getAllNodes();
 	marked={};
 	
-	ans += "rankdir=LR;\n";
+	declarations += "dirType=back;\n";
+	
+	declarations += "dpi=50;\n";
+	
+	declarations += "node [shape=\"plaintext\"];\n";
+	declarations += "splines=curved;\n";
+	declarations += "ranksep=2;\n";
+	declarations += "overlap=compress;\n";
 	
 	
 	while(traversedNodes.length!=0){
@@ -212,21 +214,20 @@ function dfs(graph){
 		adjList=v.adjList;
 		//console.log(v);
 		
-		if (adjList == 0) {
-			ans += "\"" + v.name + "\"\n";
-		}
 		
 		for (var i=0;i<adjList.length;i++){
+			
+			nodeList += "\"" + v.name + "\";\n";
 			u=adjList[i];
-			ans += v.printEdgeShort(u, v.weight[i]);
+			edgeList += v.printEdgeShort(u, v.weight[i]);
 			if(marked[u.name]!=true){
 				traversedNodes.push(u);
 				marked[u.name]=true;
 			}
 		}			
 	}
-	ans+= "}";
-	return ans;
+	
+	return declarations + nodeList + edgeList + "}";
 }
 
 function binaryHeap(){
