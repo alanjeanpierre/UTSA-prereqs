@@ -209,7 +209,7 @@ function dfs(graph){
 	edgeList = "";
 	traversedNodes=graph.getAllNodes();
 	allNodes=graph.getAllNodes();
-	marked={};
+	//marked={};
 	
 	declarations += "dirType=back;\n";
 	
@@ -226,7 +226,7 @@ function dfs(graph){
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.pop();
 		//if (marked[v.name] == true) continue;
-		marked[v.name]=true;
+		//marked[v.name]=true;
 		adjList=v.adjList;
 		//console.log(v);
 		
@@ -236,12 +236,10 @@ function dfs(graph){
 			nodeList += "\"" + v.name + "\";\n";
 			u=adjList[i];
 			edgeList += v.printEdgeShort(u, v.weight[i]);
-			if(marked[u.name]!=true){
-				traversedNodes.push(u);
-				marked[u.name]=true;
-			}
+
 		}			
 	}
+	
 	
 	return declarations + nodeList + edgeList + "}";
 }
