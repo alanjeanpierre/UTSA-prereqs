@@ -1,5 +1,8 @@
 //@author devenbhooshan
 
+	const REQUIRED = "red";
+	const REQOR = "blue";
+	const RECOMMENDED = "green";
 function Graph(){
 	this.isWeighted=false;
 	this.nodes=[]
@@ -105,19 +108,19 @@ function Node(Name, Title, Desc){
 		//console.log(weight);
 		switch(weight) {
 			case 0:
-				options += " style=dashed color=red]";
+				options += " style=dashed color=" + REQUIRED + "]";
 				break;
 			case 1:
-				options += " color=red]";
+				options += " color=" + REQUIRED + "]";
 				break;
 			case 2:
-				options += " color=blue]";
+				options += " color="+ REQOR +"]";
 				break;
 			case 3:
-				options += " color=green]";
+				options += " color=" + RECOMMENDED + "]";
 				break;
 			case 4:
-				options += " style=dashed color=green]";
+				options += " style=dashed color=" + RECOMMENDED + "]";
 				break;
 			default: 
 				options += "]";
