@@ -45,7 +45,7 @@ jQuery(document).ready(function () {
 		var coursePattern = /\d\d\d\d/i;
 		var courses = transcript.querySelectorAll(".dddefault");
 		
-		g.marked = [];
+		g.transmarked = [];
 		
 		for (var i = 0; i < courses.length; i++) {
 			var disc = courses[i].innerHTML;
@@ -55,7 +55,7 @@ jQuery(document).ready(function () {
 				var node = g.getNode(c);
 				if (node && courses[i+4] != null && courses[i+4].innerHTML != "F" && courses[i+4].innerHTML[0] != "D") {
 					//console.log(node.name);
-					g.marked.push(node.name);
+					g.transmarked.push(node.name);
 				}
 			}
 		}
@@ -95,8 +95,10 @@ jQuery(document).ready(function () {
   
   document.getElementById('core').onchange = function(){
 	  
-	  if (!document.getElementById('core').checked) return;
-	  
+	  if (!document.getElementById('core').checked) {
+		  g.coremarked = [];
+		  return;
+	  }
 	  core = [
 		"AIS 1203",
 		"WRC 1013",
@@ -233,10 +235,10 @@ jQuery(document).ready(function () {
 		"PHI 2043"
 	];
 	
-	g.marked = [];
+	g.coremarked = [];
 	
 	for(var i = 0; i < core.length; i++) {
-		g.marked.push(core[i]);
+		g.coremarked.push(core[i]);
 	}
 	
   }

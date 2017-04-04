@@ -3,7 +3,8 @@
 function Graph(){
 	this.isWeighted=false;
 	this.nodes=[]
-	this.marked = [];
+	this.transmarked = [];
+	this.coremarked = [];
 	this.addNode=addNode;
 	this.removeNode=removeNode;
 	this.nodeExist=nodeExist;
@@ -151,8 +152,11 @@ function bfs(graph, course){
 	}
 	else {
 		
-		for (var i = 0; i < graph.marked.length; i++) {
-			marked[graph.marked[i]] = true;
+		for (var i = 0; i < graph.transmarked.length; i++) {
+			marked[graph.transmarked[i]] = true;
+		}
+		for (var i = 0; i < graph.coremarked.length; i++) {
+			marked[graph.coremarked[i]] = true;
 		}
 	}
 	
