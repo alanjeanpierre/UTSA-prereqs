@@ -1,0 +1,52 @@
+
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Graph Legend</title>
+  </head>
+<body>
+
+<style>
+  <link rel="stylesheet" href="css/prereqs.css">
+  button { margin:4px; cursor:pointer; font-size: 70%; font-family; arial,sans-serif; margin-right: 5px }
+</style>
+
+<div id="graphviz_svg_div">
+  <!-- Target for dynamic svg generation -->
+</div>
+
+
+
+
+<!-- Defer loading of javascript by placing these tags at the tail end of the document -->
+<script language="javascript" type="text/javascript" src="js/jquery.min.js"> </script>
+<script language="javascript" type="text/javascript" src="js/viz.js"></script>
+<script language="javascript" type="text/javascript" src="js/graphlib.js"></script>
+<script language="javascript" type="text/javascript">
+	
+
+	var svg_div = jQuery('#graphviz_svg_div');
+
+	svg_div.html("");
+	var data = [
+	"digraph Example {\n",
+		"z [label=\"The class you're looking at\"];",
+		"a [label=\"Required class\"];", 
+		"b [label=\"Concurrent class\"];",
+		"c [label=\"One of some required classes\n(eg Prereqs: MAT 1214 or EGR 1322)\"];",
+		"c1 [label=\"One of some required classes\n(eg Prereqs: MAT 1214 or EGR 1322)\"];",
+		"d [label=\"Recommended classes\"];",
+		"z -> a [color=" + REQUIRED + "];",
+		"z -> d [color=" + RECOMMENDED + "];",
+		"z -> b [style=dashed color=" + REQUIRED + "];",
+		"a -> c [color=" + REQOR + "];",
+		"a -> c1 [color=" + REQOR + "];",
+		"}"
+		].join("\n");
+	console.log(data);
+	// Generate the Visualization of the Graph into "svg".
+	var svg = Viz(data, {format:"svg", engine:"dot"});
+	svg_div.html("<hr>"+svg);
+
+
+</script>
+</body></html>
