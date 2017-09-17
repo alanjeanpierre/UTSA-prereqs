@@ -3,6 +3,7 @@
 	const REQUIRED = "red";
 	const REQOR = "blue";
 	const RECOMMENDED = "green";
+	
 function Graph(){
 	this.isWeighted=false;
 	this.nodes=[]
@@ -163,18 +164,26 @@ function bfs(graph, course){
 		}
 	}
 	
-	if (document.getElementById("flip").checked) 
+	
+	
+	if (document.getElementById("flip").checked) {
 		declarations += "rankdir=BT;\n";
-
+	}
+	else {
+		declarations += "rankdir=RL;\n";
+	}
 	
-	declarations += "dirType=back;\n";
+	//declarations += "dirType=back;\n";
+	//declarations += "dpi=50;\n";
+	//declarations += "splines=curved;\n";
+	//declarations += "splines=true;\n";
+	declarations += "splines=ortho;\n";
 	
-	declarations += "dpi=70;\n";
+	sep = document.getElementById("myRange").value;
 	
-	declarations += "splines=curved;\n";
-	declarations += "splines=true;\n";
-	declarations += "nodesep=0.1;\n";
-	declarations += "node [fontsize=9 width=3 fixedsize=true];\n";
+	declarations += `nodesep=${sep/100};\n`;
+	declarations += "node [fontsize=9 width=3 fixedsize=true shape=box];\n";
+	declarations += "edge [arrowsize=0.5];\n";
 	
 	while(traversedNodes.length!=0){
 		var v=traversedNodes.shift();
